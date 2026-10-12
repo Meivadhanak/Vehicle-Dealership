@@ -1,0 +1,10 @@
+Fleet Average Mileage: 84400.00 km
+Cheapest Vehicle: Vehicle{brand='Opel Astra', basePrice=2200000.00, age=11, km=190000.00, fuelType=PETROL, finalPrice=550000, averageKmPerYear=17272.73}
+Top Electric Vehicle: batteryCapacity=77 kWh, averageKmPerYear=15000.00 km
+Total Fleet Inventory Value: 67232556
+Filtered Hybrid Inventory:
+  ElectricVehicle{Vehicle{brand='Renault Zoe', basePrice=3900000.00, age=6, km=82000.00, fuelType=HYBRID, finalPrice=3622498, averageKmPerYear=13666.67}, batteryCapacity=52 kWh, hasHeatPump=true}
+  ElectricVehicle{Vehicle{brand='Nissan Leaf', basePrice=4800000.00, age=5, km=65000.00, fuelType=HYBRID, finalPrice=4657500, averageKmPerYear=13000.00}, batteryCapacity=40 kWh, hasHeatPump=false}
+  Vehicle{brand='Toyota Corolla', basePrice=5500000.00, age=4, km=75000.00, fuelType=HYBRID, finalPrice=5635000, averageKmPerYear=18750.00}
+Young Inventory Count: 5
+Discount Simulation: updated final price of Opel Astra = 330000
