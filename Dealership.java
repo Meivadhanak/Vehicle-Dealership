@@ -7,15 +7,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Manages the vehicle inventory and produces dealership reports.
+ */
 public class Dealership {
+    private static final Logger LOGGER = AppLogger.getLogger(Dealership.class);
+
     private final TreeSet<Vehicle> vehicles = new TreeSet<Vehicle>();
 
+    /**
+     * Creates an empty dealership inventory.
+     */
+    public Dealership() {
+        LOGGER.info("Dealership constructor called");
+    }
+
+    /**
+     * Returns the dealership's vehicle inventory.
+     *
+     * @return the sorted inventory
+     */
     public TreeSet<Vehicle> getVehicles() {
+        LOGGER.info("Dealership.getVehicles called");
         return vehicles;
     }
 
+    /**
+     * Loads vehicles from a text file, using built-in inventory if loading fails
+     * or the file contains no valid vehicles.
+     *
+     * @param file path to the inventory file
+     */
     public void loadVehicles(Path file) {
+        LOGGER.info("Dealership.loadVehicles called for " + file);
         try {
             List<String> lines = Files.readAllLines(file);
             int lineNumber = 0;
@@ -27,6 +54,8 @@ public class Dealership {
                 try {
                     vehicles.add(parseVehicle(line));
                 } catch (IllegalArgumentException exception) {
+                    LOGGER.log(Level.SEVERE, "Skipping invalid vehicle on line " + lineNumber
+                            + " in " + file + ".", exception);
                     System.err.println("Skipping invalid vehicle on line " + lineNumber + ": "
                             + exception.getMessage());
                 }
@@ -36,13 +65,22 @@ public class Dealership {
                 loadDefaultVehicles();
             }
         } catch (IOException exception) {
+            LOGGER.log(Level.SEVERE, "Could not read vehicle inventory from " + file + ".", exception);
             System.err.println("Could not read " + file + ": " + exception.getMessage()
                     + "; using built-in inventory.");
             loadDefaultVehicles();
         }
     }
 
+    /**
+     * Parses one vehicle record from the inventory file.
+     *
+     * @param line record containing vehicle fields separated by {@code #}
+     * @return the parsed vehicle
+     * @throws IllegalArgumentException if the record is malformed
+     */
     private Vehicle parseVehicle(String line) {
+        LOGGER.info("Dealership.parseVehicle called");
         String[] fields = line.split("#", -1);
         try {
             String type = fields[0].trim();
@@ -66,17 +104,28 @@ public class Dealership {
             }
             throw new IllegalArgumentException("unrecognized row type or incorrect number of fields.");
         } catch (IndexOutOfBoundsException | NumberFormatException exception) {
+            LOGGER.log(Level.SEVERE, "Invalid field while parsing a vehicle record.", exception);
             throw new IllegalArgumentException("missing or invalid field.", exception);
         }
     }
 
+    /**
+     * Adds the built-in inventory to the dealership.
+     */
     private void loadDefaultVehicles() {
+        LOGGER.info("Dealership.loadDefaultVehicles called");
         vehicles.add(new Vehicle("Toyota Corolla", 5500000, 4, 75000, FuelType.HYBRID));
         vehicles.add(new Vehicle("Volkswagen Golf", 4200000, 6, 120000, FuelType.DIESEL));
         vehicles.add(new ElectricVehicle("Tesla Model 3", 11500000, 2, 38000, 75, true));
     }
 
+    /**
+     * Builds a report containing inventory statistics and a discount simulation.
+     *
+     * @return formatted dealership report
+     */
     private String createReport() {
+        LOGGER.info("Dealership.createReport called");
         StringBuilder report = new StringBuilder();
         if (vehicles.isEmpty()) {
             return "Fleet Average Mileage: N/A (no vehicles)\n"
@@ -143,7 +192,14 @@ public class Dealership {
         return report.toString();
     }
 
+    /**
+     * Loads the inventory, prints the generated report, and writes it to a file.
+     *
+     * @param args command-line arguments (not used)
+     * @throws IOException if the report cannot be written
+     */
     public static void main(String[] args) throws IOException {
+        LOGGER.info("Dealership.main called");
         Dealership dealership = new Dealership();
         dealership.loadVehicles(Paths.get("vehicles.txt"));
         String report = dealership.createReport();
