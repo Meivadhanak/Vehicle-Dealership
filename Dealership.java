@@ -182,14 +182,40 @@ public class Dealership {
         }
         report.append("Young Inventory Count: ").append(youngCount).append(System.lineSeparator());
 
-        Vehicle discountedVehicle = vehicles.first();
-        vehicles.remove(discountedVehicle);
+        Vehicle discountedVehicle = createDiscountSimulationCopy(vehicles.first());
         discountedVehicle.applyDiscount(10);
-        vehicles.add(discountedVehicle);
         report.append("Discount Simulation: updated final price of ")
                 .append(discountedVehicle.getBrand()).append(" = ")
                 .append(discountedVehicle.getFinalPrice()).append(System.lineSeparator());
         return report.toString();
+    }
+
+    /**
+     * Creates a temporary copy for the discount simulation so the inventory is not changed.
+     *
+     * @param vehicle vehicle to copy
+     * @return a copy with the same vehicle attributes
+     */
+    private Vehicle createDiscountSimulationCopy(Vehicle vehicle) {
+        if (vehicle instanceof ElectricVehicle) {
+            ElectricVehicle electricVehicle = (ElectricVehicle) vehicle;
+            return new ElectricVehicle(
+                    electricVehicle.getBrand(),
+                    electricVehicle.getModel(),
+                    electricVehicle.getBasePrice(),
+                    electricVehicle.getAge(),
+                    electricVehicle.getKm(),
+                    electricVehicle.getFuelType(),
+                    electricVehicle.getBatteryCapacity(),
+                    electricVehicle.hasHeatPump());
+        }
+        return new Vehicle(
+                vehicle.getBrand(),
+                vehicle.getModel(),
+                vehicle.getBasePrice(),
+                vehicle.getAge(),
+                vehicle.getKm(),
+                vehicle.getFuelType());
     }
 
     /**
