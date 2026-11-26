@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Objects;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -43,8 +44,10 @@ public final class AppLogger {
      *
      * @param owner class whose logger is requested
      * @return the class-specific logger
+     * @throws NullPointerException if {@code owner} is {@code null}
      */
     public static Logger getLogger(Class<?> owner) {
+        Objects.requireNonNull(owner, "owner");
         Logger logger = Logger.getLogger(owner.getName());
         logger.setLevel(Level.INFO);
         logger.info("AppLogger.getLogger called for " + owner.getSimpleName());
