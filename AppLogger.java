@@ -19,13 +19,13 @@ public final class AppLogger {
     }
 
     /**
-     * Creates and registers the append-mode file handler for application logs.
+     * Creates and registers the append-mode file handler without changing the
+     * root logger's configured threshold.
      *
      * @return configured handler for {@code cardealerApp.log}
      */
     private static Handler createFileHandler() {
         Logger rootLogger = Logger.getLogger("");
-        rootLogger.setLevel(Level.INFO);
         try {
             Handler handler = new FileHandler("cardealerApp.log", true);
             handler.setLevel(Level.INFO);
