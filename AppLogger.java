@@ -29,6 +29,7 @@ public final class AppLogger {
         try {
             Handler handler = new FileHandler("cardealerApp.log", true);
             handler.setLevel(Level.INFO);
+            handler.setEncoding("UTF-8");
             handler.setFormatter(new SimpleFormatter());
             rootLogger.addHandler(handler);
             rootLogger.info("AppLogger.createFileHandler called");
